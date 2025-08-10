@@ -163,3 +163,4 @@ cython_debug/
 
 # data
 .*csv
+credit_card_fraud.csv
