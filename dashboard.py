@@ -1,0 +1,57 @@
+#dashboard
+import streamlit as st
+import pandas as pd
+import numpy as np
+import joblib
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+
+#set page config
+st.set_page_config(page_title="Fraud detection Dashboard", layout="wide")
+st.title("Credit Card Fraud Detection Dahboard")
+
+#Load Model and features
+@st.cache_resource
+def load_model():
+  model = joblib.load('trained_model.pkl')
+  feature_columns = joblib.load('feature_columns.pkl')
+  return model, feature_columns
+
+model, feature_columns = load_model()
+
+#load data
+@st.cache_data
+def load_data():
+  df = pd.read_csv('Data/credit_card_fraud.csv')
+  df['trans_date_trans_time'] = pd.to_datetime(df['trans_date_trans_time'])
+  df['dob'] = pd.to_datetime(df['dob'])
+  return df
+
+df = load_data()
+
+#sidebar filter
+st.sidebar.header("Filter Data")
+st.sidebar.markdown("Adjust filter to explore dataset")
+
+#Filter by amount
+min_amt, max_amt = st.sidebar.slider("Transaction Amount", 0 , int(df['amt'].max()), (0, 500))
+
+#filter by state
+all_states = df['state'].unique()
+selected_state = st.sidebar.multiselect("States", all_states, default=all_states[:3])
+
+#Filter by fraud status
+fraud_status = st.sidebar.radio("Fraud Status", ["All", "Non Fraud(0)", "Fraud (1)"])
+
+#Apply filters
+filtered_df = df[(df['amt'] >= min_amt) & (df['amt'] <= max_amt)]
+filtered_df = filtered_df[filtered_df['state'].isin(selected_state)]
+
+if fraud_status == "Non-Fraud (0)":
+  filtered_df = filtered_df[filtered_df['is_fraud'] == 0]
+elif fraud_status == "Fraud (1)":
+  filtered_df = filtered_df[filtered_df['is_fraud'] == 1]
+
+  #Tabs
+  tab1, tab2, tab3, tab4 = st.tabs("Overview" , "Visualizations" , "Predic Fraud" , "Model Info")
