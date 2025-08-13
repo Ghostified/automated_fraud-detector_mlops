@@ -55,3 +55,17 @@ elif fraud_status == "Fraud (1)":
 
   #Tabs
   tab1, tab2, tab3, tab4 = st.tabs("Overview" , "Visualizations" , "Predic Fraud" , "Model Info")
+#--------------------
+# TAB 1 : Overview
+#--------------------
+with tab1:
+  st.header("Dataset Overview")
+  col1, col2, col3 = st.columns(3)
+  col1.metric("Total Transactions", f"{len(df):,}")
+  col2.metric("Fraud Cases", f"{df['is_fraud'].sum()}", f"{df['is_fraud'].mean()*100:.1f}%")
+  col3.metric("Features", len(feature_columns))
+
+  st.subheader("Sample of Filtered Data")
+  st.dataframe(filtered_df[['amt', 'category', 'state', 'city', 'is_fraud']].head(10))
+  
+              
