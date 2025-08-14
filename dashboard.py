@@ -68,4 +68,31 @@ with tab1:
   st.subheader("Sample of Filtered Data")
   st.dataframe(filtered_df[['amt', 'category', 'state', 'city', 'is_fraud']].head(10))
   
-              
+#=====================
+# TAB 2 : Visualiztion
+#=====================
+with tab2:
+  st.header("Fraud Insights")
+
+  col1, col2 = st.columns(2)
+
+  with col1:
+    st.subheader("Fraud By Category")
+    category_fraud = df.groupby('Category')['is_fraud'].mean().sort_values(ascending=False).head(10)
+    fig, ax = plt.subplots()
+    sns.barplot(x=category_fraud.values, y=category_fraud.index, ax=ax, palette="Reds_r")
+    ax.set_xlabel("Fraud Rate")
+    st.pyplot(fig)
+
+    with col2:
+      st.subheader("Transactions by Hour")
+      df['hour'] = df['trans_date_trans_time'].dt.hour
+      hourly = df['hour'].value_counts().sort_index()
+      fig, ax = plt.subplots()
+      ax.plot(hourly.index, hourly.values, color='skyblue', linewidth=2)
+      ax.set_xlabel("Hour of Day")
+      ax.set_ylabel("Transaction count")
+      st.pyplot(fig)
+    
+    st.subheader("Fraud Rate By State")
+    state_fraud = df.groupby('state')['is_fraud'].mean()sort_values(ascending=False).head(10)
