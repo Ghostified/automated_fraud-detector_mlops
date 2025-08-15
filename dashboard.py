@@ -93,6 +93,11 @@ with tab2:
       ax.set_xlabel("Hour of Day")
       ax.set_ylabel("Transaction count")
       st.pyplot(fig)
-    
+
+    #Heatmap: Fraud Rate By State
     st.subheader("Fraud Rate By State")
-    state_fraud = df.groupby('state')['is_fraud'].mean()sort_values(ascending=False).head(10)
+    state_fraud = df.groupby('state')['is_fraud'].mean().sort_values(ascending=False).head(10)
+    fig, ax = plt.subplots(figsize=(10, 4))
+    sns.barplot(x=state_fraud.values, y=state_fraud.index, ax=ax, palette="coolwarm")
+    ax.set_xlabel("Fraud Rate")
+    st.pyplot(fig)
