@@ -69,7 +69,6 @@ with tab1:
     st.dataframe(filtered_df[['amt', 'category', 'state', 'city', 'is_fraud']].head(10))
 
     st.subheader("Transaction Locations")
-    #st.map(filtered_df, latitude='lat', longitude='long', color='is_fraud', size=50)
     map_df = filtered_df[['lat', 'long', 'is_fraud']].copy()
     map_df['color'] = map_df['is_fraud'].map({
         0: [0, 102 , 255 , 150],

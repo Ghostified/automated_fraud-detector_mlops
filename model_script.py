@@ -82,13 +82,6 @@ print("Confusion Matrix:")
 print(confusion_matrix(y_test, y_pred))
 
 #%% plot confusion matrix
-# plt.figure(figsize=(6, 4))
-# sns.heatmap(
-#   cm, annot=True, fmt='d' , cmap='Blues' , xticklabels=['Non-fraud', 'Fraud'], yticklabels=['Non-fraud', 'Fraud'])
-# plt.title('Confusion Matrix')
-# plt.ylabel('Actual')
-# plt.xlabel('Predicted')
-# plt.show()
 plt.figure(figsize=(6, 4))
 sns.heatmap(
     confusion_matrix(y_test, y_pred),
