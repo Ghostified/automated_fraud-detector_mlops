@@ -68,6 +68,20 @@ with tab1:
     st.subheader("Sample of Filtered Data")
     st.dataframe(filtered_df[['amt', 'category', 'state', 'city', 'is_fraud']].head(10))
 
+    st.subheader("Transaction Locations")
+    #st.map(filtered_df, latitude='lat', longitude='long', color='is_fraud', size=50)
+    map_df = filtered_df[['lat', 'long', 'is_fraud']].copy()
+    map_df['color'] = map_df['is_fraud'].map({
+        0: [0, 102 , 255 , 150],
+        1: [255, 0, 0, 150]
+    })
+
+    #Drop rows with missing long/lat
+    map_df.dropna(subset=['lat','long'], inplace=True)
+
+    #Show map
+    st.map(map_df, latitude='lat' ,longitude='long', color='color', size=50)
+
 # -------------------------------
 # TAB 2: Visualizations
 # -------------------------------
@@ -159,6 +173,33 @@ with tab3:
         else:
             st.success(f"🟢 Safe transaction.")
             st.write(f"**Confidence:** {confidence:.1f}%")
+
+        #Create result data frame
+        result_df = pd.DataFrame({
+            'Amount': [amt],
+            'State': [state],
+            'Category': [category],
+            'Customer Age': [customer_age] ,
+            'Hour':[transaction_hour],
+            'City Population' : [city_pop],
+            'Prediction' : ['Fraud' if pred == 1 else 'Safe'],
+            'Confidence (%)': [round(confidence, 1)]
+        })
+
+        st.dataframe(result_df)
+
+        #Download Button
+        @st.cache_data
+        def convert_df_to_csv(df):
+            return df.to_csv(index=False).encode('utf-8')
+        
+        csv = convert_df_to_csv(result_df)
+        st.download_button(
+            label="📥 Download Prediction as CSV",
+            data=csv,
+            file_name="fraud_prediction.csv",
+            mime="text/csv"
+        )
 
 # -------------------------------
 # TAB 4: Model Info
