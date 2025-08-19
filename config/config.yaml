@@ -1,0 +1,20 @@
+path: "data/credit_card_fraud.csv"
+
+features:
+  drop_columns:
+    - merchant
+    - job
+    - trans_num
+    - city
+    - trans_date_trans_time
+    - dob
+
+model:
+  target: "is_fraud"
+  n_estimators: 100
+  random_state: 42
+
+
+ui:
+  title: "FraudShield AI"
+  theme: "dark"
