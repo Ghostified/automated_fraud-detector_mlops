@@ -45,5 +45,5 @@ class ModelTrainer:
     self.y_test = y_test
 
     #3. Train Random Forest
-    print("")
+    print("Training random foret")
 
