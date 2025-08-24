@@ -45,5 +45,34 @@ class ModelTrainer:
     self.y_test = y_test
 
     #3. Train Random Forest
-    print("Training random foret")
+    print("Training random foret....")
+    rf = RandomForestClassifier(n_estimators=100, random_state=42, n_jobs=-1)
+    rf.fir(X_train, y_train)
+    self.models['RandomForest'] = rf
+
+    #4. Train XGBoost
+    scale_pos_weight = len(y_train[y_train == 0]) / len(y_train[y_train ==1])
+    xgb = XGBClassifier(
+      n_estimators = 100,
+      max_depth= 6,
+      learning_rate=0.1,
+      scale_pos_weight=scale_pos_weight,
+      subsample=0.8,
+      colsample_bytree=0.8,
+      random_state=42,
+      eval_metric='logloss',
+      use_label_encoder=False,
+      n_jobs=-1
+    )
+    xgb.fit(X_train,y_train)
+    self.models['XGBoost'] = xgb
+
+    #5. Evaluate Both Models
+    self._evaluate_all()
+
+    #6. Save all models and feature names
+    self._save_all()
+
+    print("Training completed and Models saved.")
+    return self.models
 
