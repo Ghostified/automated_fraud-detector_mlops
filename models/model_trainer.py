@@ -76,7 +76,6 @@ class ModelTrainer:
     print("Training completed and Models saved.")
     return self.models
 
-    #7.
-    print("Training completed and Models saved.")
+    #7. print("Training completed and Models saved.")
     return self.models
 
