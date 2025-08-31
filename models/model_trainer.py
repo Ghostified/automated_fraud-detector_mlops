@@ -77,6 +77,4 @@ class ModelTrainer:
     return self.models
 
     #7. 
-    print("Training completed and Models saved.")
-    return self.models
 
